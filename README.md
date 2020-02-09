@@ -1,1 +1,4 @@
-# musou-online-chrome-extension
+Disclaimer: Use this extension at your own risk.
+
+----
+
