@@ -1,0 +1,17 @@
+import {NgModule} from '@angular/core';
+import {DailyLoginComponent} from './daily-login.component';
+import {AppCommonModule} from "../../common.module";
+import {RouterModule} from "@angular/router";
+
+@NgModule({
+    declarations: [DailyLoginComponent],
+    imports: [
+        AppCommonModule,
+        RouterModule.forChild([{
+            path: 'daily-login',
+            component: DailyLoginComponent,
+        }])
+    ]
+})
+export class DailyLoginModule {
+}

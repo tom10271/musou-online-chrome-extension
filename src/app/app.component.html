@@ -1,1 +1,21 @@
-nav
+<nav id="app-navbar" class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <a class="navbar-brand" [routerLink]="['/']">真三國無雙online Chrome 插件</a>
+    </div>
+    <div id="navbar">
+        <ul class="nav navbar-nav">
+            <li>
+                <a routerLink="/daily-login">
+                    每日登入
+                </a>
+            </li>
+            <li>
+                <a routerLink="/settings">
+                    設定
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>

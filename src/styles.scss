@@ -1,4 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+$border-radius-base: 0px !default;
+$border-radius-large: 0px !default;
+$border-radius-small: 0px !default;
+$input-border: #D4D9DD;
+
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
 body {
     margin: 0;
 }

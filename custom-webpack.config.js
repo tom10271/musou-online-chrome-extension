@@ -1,3 +1,6 @@
 module.exports = {
-    entry: { background: 'src/background.ts' },
+    entry: {
+        background: 'src/background.ts',
+        contentScripts: 'src/content-scripts/main.js'
+    },
 }

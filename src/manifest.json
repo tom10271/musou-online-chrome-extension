@@ -3,7 +3,9 @@
     "version": "0.0.0",
     "description": "",
     "manifest_version": 2,
+    "author": "tom10271",
     "permissions": [
+        "tabs",
         "activeTab",
         "webNavigation",
         "storage"
@@ -14,6 +16,18 @@
             "runtime.js"
         ]
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://msp.musou-online.jp/*",
+                "https://www.gamecity.ne.jp/waap/login/msol_sp"
+            ],
+            "js": [
+                "contentScripts.js",
+                "runtime.js"
+            ]
+        }
+    ],
     "browser_action": {
     }
 }

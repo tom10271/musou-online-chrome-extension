@@ -3,6 +3,9 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {AppCommonModule} from "./common.module";
+import {SettingModule} from "./modules/setting/setting.module";
+import {RouterModule} from "@angular/router";
+import {DailyLoginModule} from "./modules/daily-login/daily-login.module";
 
 @NgModule({
     declarations: [
@@ -10,7 +13,12 @@ import {AppCommonModule} from "./common.module";
     ],
     imports: [
         BrowserModule,
-        AppCommonModule
+        RouterModule.forRoot([], {
+            useHash: true
+        }),
+        AppCommonModule,
+        SettingModule,
+        DailyLoginModule
     ],
     providers: [],
     bootstrap: [AppComponent]

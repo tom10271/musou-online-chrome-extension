@@ -1,0 +1,51 @@
+<div class="panel panel-default" *ngIf="settings">
+    <div class="panel-heading">帳號設定</div>
+    <div class="panel-body">
+        <small>
+            如果你在Chrome有登入Google帳戶的話，以下輸入的密碼將會上存到Google。 <br>
+            當你在另外一台電腦再度登入時，以下設定均會自動重載。
+        </small>
+
+        <div class="col-xs-12 row">
+            <form (submit)="saveSettings()">
+                <div class="col-xs-12">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" (click)="addBlankAccount()">新增</button>
+                    </div>
+                </div>
+
+                <div class="account col-xs-2" *ngFor="let account of settings.accounts; let i = index">
+                    <div class="form-group">
+                        <label>帳號</label>
+                        <input type="text" [(ngModel)]="account.loginName" [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="form-group">
+                        <label>密碼</label>
+                        <input type="password" [(ngModel)]="account.password" [ngModelOptions]="{standalone: true}">
+                    </div>
+
+                    <label>
+                        <input type="checkbox" [(ngModel)]="account.functionsEnabled.dailyLogin" [ngModelOptions]="{standalone: true}" />
+                        每日自動登入
+                    </label>
+
+                    <div class="account-control-buttons-container">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-warning" (click)="settings.accounts.splice(i, 1)">刪除</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="batch-account-import col-xs-12">
+                    <textarea cols="30" rows="10" [(ngModel)]="batchAccountsImportSettings" [ngModelOptions]="{standalone: true}"></textarea>
+                </div>
+
+                <div class="row col-xs-12">
+                <button class="btn btn-primary">
+                    更新
+                </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

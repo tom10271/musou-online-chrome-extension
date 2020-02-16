@@ -1,46 +1,44 @@
-import { NgModule } from '@angular/core';
+import {NgModule, NgZone} from '@angular/core';
 import { Router, RouterModule } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {CommonDIContainer} from "./services/CommonDIContainer";
+import {StatusService} from "./services/status.service";
+import {TrimPipe} from "./reusable/pipes/trim.pipe";
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-
-        RouterModule.forRoot([{
-            path: '',
-            component: HomeComponent,
-        }], {
-            useHash: true
-        })
     ],
     declarations: [
+        TrimPipe,
     ],
     exports: [
         CommonModule,
         FormsModule,
         RouterModule,
+
+        TrimPipe
     ],
     providers: [
         {
             provide: CommonDIContainer,
             useFactory: (
                 Router,
-                Store,
-                HttpClient,
-                AuthService,
+                NgZone,
+                StatusService,
             ) => {
                 return new CommonDIContainer(
                     Router,
-                    Store,
-                    HttpClient,
-                    AuthService,
+                    NgZone,
+                    StatusService,
                 )
             },
             deps: [
                 Router,
-                CommonStatus
+                NgZone,
+                StatusService,
             ]
         },
     ],

@@ -1,15 +1,18 @@
 import { Router } from "@angular/router";
-import { Injectable } from "@angular/core";
+import {Injectable, NgZone} from "@angular/core";
 import {StatusService} from "./status.service";
 
 @Injectable()
 export class CommonDIContainer {
     inject: any = [
         'router',
+        'ngZone',
+        'statusService',
     ];
 
     constructor(
         public router: Router,
-        public baseStatus: StatusService,
+        public ngZone: NgZone,
+        public statusService: StatusService,
     ) {}
 }
