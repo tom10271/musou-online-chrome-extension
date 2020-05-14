@@ -8,35 +8,37 @@
 
         <div class="col-xs-12 row">
             <form (submit)="saveSettings()">
-                <div class="col-xs-12">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" (click)="addBlankAccount()">新增</button>
-                    </div>
-                </div>
-
-                <div class="account col-xs-2" *ngFor="let account of settings.accounts; let i = index">
-                    <div class="form-group">
-                        <label>帳號</label>
-                        <input type="text" [(ngModel)]="account.loginName" [ngModelOptions]="{standalone: true}">
-                    </div>
-                    <div class="form-group">
-                        <label>密碼</label>
-                        <input type="password" [(ngModel)]="account.password" [ngModelOptions]="{standalone: true}">
-                    </div>
-
-                    <label>
-                        <input type="checkbox" [(ngModel)]="account.functionsEnabled.dailyLogin" [ngModelOptions]="{standalone: true}" />
-                        每日自動登入
-                    </label>
-
-                    <div class="account-control-buttons-container">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-warning" (click)="settings.accounts.splice(i, 1)">刪除</button>
-                        </div>
-                    </div>
-                </div>
+                <table class="account-setting">
+                    <thead>
+                    <tr>
+                        <th class="account">帳號</th>
+                        <th class="password">密碼</th>
+                        <th class="character-name">角色名稱</th>
+                        <th class="group-names">群組</th>
+                        <th class="daily-login">每天登入</th>
+                        <th class="delete-button">刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let account of settings.accounts; let i = index">
+                            <td class="account"><input type="text" [(ngModel)]="account.loginName" [ngModelOptions]="{standalone: true}"></td>
+                            <td class="password"><input type="password" [(ngModel)]="account.password" [ngModelOptions]="{standalone: true}"></td>
+                            <td class="character-name">{{ account.characterName ? account.characterName : '未曾登入' }}</td>
+                            <td class="group-names">
+                                <textarea [(ngModel)]="account.groupNameStr" [ngModelOptions]="{standalone: true}" rows="5"></textarea>
+                            </td>
+                            <td class="daily-login"><input type="checkbox" [(ngModel)]="account.functionsEnabled.dailyLogin" [ngModelOptions]="{standalone: true}" /></td>
+                            <td class="delete-button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-warning" (click)="settings.accounts.splice(i, 1)">刪除</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div class="batch-account-import col-xs-12">
+                    批量更新
                     <textarea cols="30" rows="10" [(ngModel)]="batchAccountsImportSettings" [ngModelOptions]="{standalone: true}"></textarea>
                 </div>
 

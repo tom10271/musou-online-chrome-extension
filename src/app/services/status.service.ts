@@ -10,7 +10,7 @@ export class StatusService {
 
     constructor() {
         this.settings$ = new Observable(subscriber => {
-            chrome.storage.sync.get('settings', ({ settings }) => {
+            chrome.storage.local.get('settings', ({ settings }) => {
                 subscriber.next(<Settings>settings || new Settings());
 
                 subscriber.complete();
@@ -20,7 +20,7 @@ export class StatusService {
 
     updateSettings$(settings: Settings) {
         return new Observable(subscriber => {
-            chrome.storage.sync.set({
+            chrome.storage.local.set({
                 settings
             }, () => {
                 subscriber.complete();

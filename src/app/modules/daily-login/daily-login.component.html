@@ -1,3 +1,43 @@
+<div class="groups-container" *ngFor="let group of groupNames"
+     (click)="group.enabled = !group.enabled; resolveAccountsToLogin();">
+    {{ group.name }}: {{ group.enabled }}
+</div>
+
+<button (click)="setOnOffForAllGroups(true); resolveAccountsToLogin();">Enable all groups</button>
+<button (click)="setOnOffForAllGroups(false); resolveAccountsToLogin();">Disable all groups</button>
+
+<hr>
+
+<form>
+    <label>
+        <input type="checkbox" [checked]="actionsToRun.indexOf('dailyLogin') > -1"
+               (change)="onActionSelectionChanged('dailyLogin', $event.target.checked)"/>
+        每人登入
+    </label>
+    <label>
+        <input type="checkbox" [checked]="actionsToRun.indexOf('collectStampReward') > -1"
+               (change)="onActionSelectionChanged('collectStampReward', $event.target.checked)"/>
+        無雙盤
+    </label>
+    <label>
+        <input type="checkbox" [checked]="actionsToRun.indexOf('raffleWithCoins') > -1"
+               (change)="onActionSelectionChanged('raffleWithCoins', $event.target.checked)"/>
+        抽獎
+    </label>
+    <label>
+        <input type="checkbox" [checked]="actionsToRun.indexOf('collectRewardInBox') > -1"
+               (change)="onActionSelectionChanged('collectRewardInBox', $event.target.checked)"/>
+        受取箱
+    </label>
+</form>
+
+<hr>
+
+<div>
+    <div *ngFor="let action of actionsToRun; let i = index"
+          [ngStyle]="{'font-weight': i == actionToRunIndex ? 'bold': null}">{{ action }}</div>
+</div>
+
 <button (click)="begin()">
     開始
 </button>
@@ -5,3 +45,17 @@
 <button (click)="stop()">
     停止
 </button>
+
+<button (click)="i = i + 1; actionToRunIndex = 0;">下一位</button>
+
+<ng-container *ngIf="accountsToLogin.length> i">
+    現正登入： {{ accountsToLogin[i].characterName }}
+</ng-container>
+
+<div class="users-to-login-container">
+    <div class="col-xs-1"
+         *ngFor="let account of accountsToLogin; let listIndex = index;"
+         [ngStyle]="{'font-weight': i == listIndex ? 'bold': null}">
+        {{ account.loginName }}
+    </div>
+</div>

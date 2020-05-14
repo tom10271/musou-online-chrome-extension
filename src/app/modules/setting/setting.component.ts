@@ -9,7 +9,7 @@ import {CommonDIContainer} from "../../services/CommonDIContainer";
     styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent extends BaseComponent implements OnInit {
-    batchAccountsImportSettings: string = '';
+    batchAccountsImportSettings: string = ``;
 
     constructor(
         diContainer: CommonDIContainer,
@@ -33,6 +33,10 @@ export class SettingComponent extends BaseComponent implements OnInit {
                     account.functionsEnabled.dailyLogin = each[2].toLowerCase() === 'true';
                 }
 
+                if (each.length >= 4) {
+                    account.groupNameStr = each[3];
+                }
+
                 return account;
             })
             .forEach(each => {
@@ -50,6 +54,14 @@ export class SettingComponent extends BaseComponent implements OnInit {
 
         settingsClone.accounts = settingsClone.accounts.filter((each) => {
             return each.loginName && each.password;
+        });
+
+        settingsClone.accounts = settingsClone.accounts.map((each: Account) => {
+            each.groupNames = each.groupNameStr
+                .split("|")
+                .map((each) => each.trim());
+
+            return each;
         });
 
         this.statusService

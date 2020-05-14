@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {BaseComponent} from "../../reusable/classes/BaseComponent";
 import {CommonDIContainer} from "../../services/CommonDIContainer";
+import {Account} from "../../models/Settings";
 
 @Component({
     selector: 'app-daily-login',
@@ -8,51 +9,139 @@ import {CommonDIContainer} from "../../services/CommonDIContainer";
     styleUrls: ['./daily-login.component.scss']
 })
 export class DailyLoginComponent extends BaseComponent {
-    accountsToLogin = [];
+    actionsToRun: string[] = [
+        'dailyLogin',
+        'collectStampReward',
+        'raffleWithCoins',
+        'collectRewardInBox',
+    ];
+    actionToRunIndex: number = 0;
+
+    accountsToLogin: Account[] = [];
+    groupNames: { name: string, enabled: boolean }[] = [];
     i = 0;
-    
+
     constructor(diContainer: CommonDIContainer) {
         super(diContainer);
 
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (sender.tab && message.status) {
-                switch (message.status) {
-                    case 'LOGIN_PAGE_READY':
-                        sendResponse({
-                            account: this.accountsToLogin[this.i]
-                        });
+                this.ngZone.run(() => {
+                    console.log({message});
 
-                        break;
+                    switch (message.status) {
+                        case 'LOGIN_PAGE_READY':
+                            sendResponse({
+                                account: this.accountsToLogin[this.i]
+                            });
 
-                    case 'LOGIN_FINISHED':
-                        this.i++;
+                            break;
 
-                        if (this.i < this.accountsToLogin.length) {
-                            sendResponse({action: 'CONTINUE'});
-                        } else {
-                            sendResponse({action: 'ALL_LOGGED_IN'});
-                        }
+                        case 'LOGGED_IN':
+                            this.accountsToLogin[this.i].characterName = message.payload.accountName;
 
-                        break;
-                }
+                            this.statusService
+                                .updateSettings$(this.settings)
+                                .subscribe(() => {
+                                });
+
+                            break;
+
+                        case 'ACTION_FINISHED':
+                            this.actionToRunIndex++;
+
+                            if (this.actionToRunIndex >= this.actionsToRun.length) {
+                                this.actionToRunIndex = 0;
+                                this.i++;
+
+                                if (this.i < this.accountsToLogin.length) {
+                                    sendResponse({action: 'NEXT_ACCOUNT'});
+                                } else {
+                                    sendResponse({action: 'ALL_ACCOUNTS_HANDLED'});
+                                }
+                            } else {
+                                chrome.storage.local.set({
+                                    action: this.actionsToRun[this.actionToRunIndex]
+                                }, () => {
+                                    sendResponse({action: 'CONTINUE'});
+                                });
+                            }
+
+                            break;
+                    }
+                });
+
+                return true;
             }
         });
     }
 
+    onInit() {
+        this.groupNames = Object.values(
+            this.settings.accounts.reduce((accu, account) => {
+                account.groupNames.forEach((groupName) => {
+                    if (!(groupName in accu)) {
+                        accu[groupName] = {
+                            name: groupName,
+                            enabled: true
+                        };
+                    }
+                });
+
+                return accu;
+            }, {})
+        );
+    }
+
+    setOnOffForAllGroups(value) {
+        this.groupNames.forEach(each => each.enabled = value);
+    }
+
+    resolveAccountsToLogin() {
+        const enabledGroupNames = this.groupNames.map(each => each.enabled ? each.name : null).filter(each => each);
+
+        this.accountsToLogin = this.settings.accounts.filter((each) => {
+            if (each.functionsEnabled.dailyLogin && this.groupNames.length > 0) {
+                if (enabledGroupNames.length === 0) {
+                    return false;
+                }
+
+                if (each.groupNames.length > 0 && enabledGroupNames.length > 0) {
+                    return each.groupNames.filter((each) => enabledGroupNames.indexOf(each) > -1).length > 0;
+                }
+            }
+
+            return each.functionsEnabled.dailyLogin;
+        });
+    }
+
     begin() {
-        chrome.storage.sync.set({
-            action: 'login'
+        this.actionToRunIndex = 0;
+        this.i = 0;
+
+        chrome.storage.local.set({
+            action: this.actionsToRun[this.actionToRunIndex]
         }, () => {
-            this.accountsToLogin = this.settings.accounts.filter((each) => each.functionsEnabled.dailyLogin);
+            this.resolveAccountsToLogin();
             this.i = 0;
+
+            console.log(this);
 
             if (this.accountsToLogin.length) {
                 chrome.tabs.create({url: 'https://www.gamecity.ne.jp/waap/login/msol_sp'});
             }
-        })
+        });
     }
 
     stop() {
-        chrome.storage.sync.set({ action: null });
+        chrome.storage.local.set({action: null});
+    }
+
+    onActionSelectionChanged(action, value) {
+        if (value) {
+            this.actionsToRun.push(action);
+        } else {
+            this.actionsToRun.splice(this.actionsToRun.indexOf(action), 1);
+        }
     }
 }
