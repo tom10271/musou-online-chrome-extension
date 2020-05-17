@@ -22,7 +22,7 @@
     "bootstrap-sass": "^3.4.1",
     "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-rc.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jszip": "^3.4.0",
     "luxon": "^1.22.0",
     "ngx-color-picker": "^8.1.0",
