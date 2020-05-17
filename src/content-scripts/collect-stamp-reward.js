@@ -1,5 +1,5 @@
 import { actionFinished, isIn } from "./common";
-import $ from "./jquery-3.4.1.min";
+import $ from "jquery";
 
 export function collectStampRewardAction() {
     if (isIn('home')) {

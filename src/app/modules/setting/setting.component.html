@@ -37,10 +37,17 @@
                     </tbody>
                 </table>
 
+                <button type="button" (click)="addBlankAccount()">
+                    新增帳號
+                </button>
+
+                <hr>
+
                 <div class="batch-account-import col-xs-12">
-                    批量更新
-                    <textarea cols="30" rows="10" [(ngModel)]="batchAccountsImportSettings" [ngModelOptions]="{standalone: true}"></textarea>
-                </div>
+                    <header>
+                        批量更新
+                    </header>
+                    <textarea cols="100" rows="10" [(ngModel)]="batchAccountsImportSettings" [ngModelOptions]="{standalone: true}" placeholder="帳號,密碼,是否啟動每日登入<true/false>,群組名稱1[|群組名稱2]"></textarea>                </div>
 
                 <div class="row col-xs-12">
                 <button class="btn btn-primary">

@@ -23,8 +23,9 @@
                 "https://www.gamecity.ne.jp/waap/login/msol_sp"
             ],
             "js": [
-                "contentScripts.js",
-                "runtime.js"
+                "runtime.js",
+                "vendor.js",
+                "contentScripts.js"
             ]
         }
     ],

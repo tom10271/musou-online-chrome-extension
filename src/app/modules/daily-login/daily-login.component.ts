@@ -11,11 +11,20 @@ import {Account} from "../../models/Settings";
 export class DailyLoginComponent extends BaseComponent {
     actionsToRun: string[] = [
         'dailyLogin',
-        'collectStampReward',
-        'raffleWithCoins',
-        'collectRewardInBox',
+        // 'collectStampReward',
+        // 'raffleWithCoins',
+        // 'collectRewardInBox',
+        // 'screenCapWeapons'
     ];
     actionToRunIndex: number = 0;
+
+    actionTranslation = {
+        dailyLogin: '每人登入',
+        collectStampReward: '無雙盤',
+        raffleWithCoins: '抽獎',
+        collectRewardInBox: '受取箱',
+        screenCapWeapons: '輸出武器截圖',
+    };
 
     accountsToLogin: Account[] = [];
     groupNames: { name: string, enabled: boolean }[] = [];
@@ -48,7 +57,25 @@ export class DailyLoginComponent extends BaseComponent {
                             break;
 
                         case 'ACTION_FINISHED':
+                            if (
+                                this.actionsToRun[this.actionToRunIndex] === 'collectRewardInBox' &&
+                                message.result && message.result.length > 0
+                            ) {
+                                this.accountsToLogin[this.i].rewardsToCollect = message.result;
+
+                                console.log(this.settings);
+
+                                debugger;
+
+                                this.statusService
+                                    .updateSettings$(this.settings)
+                                    .subscribe(() => {
+                                    });
+                            }
+
                             this.actionToRunIndex++;
+
+                            debugger;
 
                             if (this.actionToRunIndex >= this.actionsToRun.length) {
                                 this.actionToRunIndex = 0;
@@ -91,6 +118,8 @@ export class DailyLoginComponent extends BaseComponent {
                 return accu;
             }, {})
         );
+
+        console.log(this);
     }
 
     setOnOffForAllGroups(value) {

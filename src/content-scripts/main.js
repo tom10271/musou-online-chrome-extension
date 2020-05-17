@@ -1,10 +1,12 @@
+import $ from "jquery";
+
 import { isIn, loginAction } from "./common";
 import { farmAction } from "./farm";
 import { dailyLoginAction } from "./login";
 import { collectRewardsAction } from "./collect-rewards";
 import { collectStampRewardAction } from "./collect-stamp-reward";
 import { raffleWithCoinsAction } from "./raffle-with-coins";
-import $ from "./jquery-3.4.1.min";
+import { screenCapWeaponsAction } from "./screen-cap-weapons";
 
 function l(u, i) {
     var d = document;
@@ -15,6 +17,7 @@ function l(u, i) {
         d.body.appendChild(s);
     }
 }
+
 l('//code.jquery.com/jquery-3.4.1.min.js', 'jquery');
 
 chrome.storage.local.get('action', ({ action, options }) => {
@@ -28,6 +31,10 @@ chrome.storage.local.get('action', ({ action, options }) => {
         if ($('#pagetitle').text().match(/無双盤\/押印不可確認/)) {
             location.href = 'http://msp.musou-online.jp/m/home';
         }
+    }
+
+    if (isIn('guildpoint_bonus') || isIn('garden_reset')) {
+        location.href = 'http://msp.musou-online.jp/m/home';
     }
 
     switch (action) {
@@ -45,5 +52,8 @@ chrome.storage.local.get('action', ({ action, options }) => {
 
         case 'collectRewardInBox':
             return collectRewardsAction(options);
+
+        case 'screenCapWeapons':
+            return screenCapWeaponsAction(options);
     }
 });

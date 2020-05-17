@@ -1,5 +1,5 @@
 import { actionFinished, isIn } from "./common";
-import $ from "./jquery-3.4.1.min";
+import $ from "jquery";
 
 export async function raffleWithCoinsAction(options) {
     if (isIn('home')) {
@@ -23,11 +23,14 @@ export async function raffleWithCoinsAction(options) {
 
 async function raffleFor(keyword) {
     return new Promise(function (resolve, reject) {
-        $('span.list_kind:contains(' + keyword + '):last').click();
+        const targetOption = $('span.list_kind:contains(' + keyword + '):last');
+        if (0 === targetOption.length) {
+            resolve(false);
+        }
+
+        targetOption.click();
 
         setTimeout(() => {
-            console.log({ el: $('.antique_buy_raffle10_btn')});
-
             $('.antique_buy_raffle10_btn')[0].dispatchEvent(new MouseEvent('mouseup'));
 
             setTimeout(() => {
@@ -59,6 +62,6 @@ async function raffleFor(keyword) {
                     resolve(true);
                 }
             }, 500);
-        }, 500);
+        }, 1000);
     });
 }

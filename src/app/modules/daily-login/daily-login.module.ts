@@ -8,7 +8,7 @@ import {RouterModule} from "@angular/router";
     imports: [
         AppCommonModule,
         RouterModule.forChild([{
-            path: 'daily-login',
+            path: 'run-scripts',
             component: DailyLoginComponent,
         }])
     ]

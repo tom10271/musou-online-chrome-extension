@@ -1,4 +1,4 @@
-import $ from "./jquery-3.4.1.min";
+import $ from "jquery";
 import { isIn, actionFinished } from "./common";
 
 export function collectRewardsAction() {
@@ -13,18 +13,46 @@ export function collectRewardsAction() {
     }
 
     if (isIn('receivebox_top')) {
-        const $firstReward = $('#radioitem0');
+        $('.list_limittime:contains(\'無期限\')').closest('[id^=radioitem]').remove();
 
-        // $('#trader_result_info').text() === "受け取れる品物や報酬はありませんでした"
+        let timeLimitedRewards = $('[id^=radioitem]');
 
-        if ($firstReward.length === 0) {
-            actionFinished();
+        if (timeLimitedRewards.length === 0) {
+            return actionFinished([]);
+        }
+
+        const irretrievableRewards = timeLimitedRewards.filter(function () {
+            return $(this).css('color') === 'rgb(64, 64, 64)';
+        });
+
+        if (irretrievableRewards.length > 0 && irretrievableRewards.length === timeLimitedRewards.length) {
+            const result = [];
+
+            irretrievableRewards.each(function () {
+                result.push({
+                    itemName: $(this).find('.list_name').text(),
+                    count: $(this).find('.list_num').text(),
+                    expireDate: $(this).find('.list_limittime').text(),
+                });
+            });
+
+            return actionFinished(result);
         } else {
-            $firstReward.click();
+            irretrievableRewards.remove();
 
-            setTimeout(() => {
-                $('#submit_btn').click();
-            }, 1000);
+            let timeLimitedRewards = $('[id^=radioitem]');
+
+            if (timeLimitedRewards.length === 0) {
+                return actionFinished([]);
+            } else {
+                const $firstReward = $(timeLimitedRewards[0]);
+
+                $firstReward.click();
+
+                setTimeout(() => {
+                    $('#submit_btn').click();
+                }, 1000);
+            }
         }
     }
 }

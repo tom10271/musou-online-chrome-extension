@@ -1,13 +1,13 @@
-import $ from "./jquery-3.4.1.min";
+import $ from "jquery";
 
 export function isIn(urlMatchRegex) {
     return window.location.href.match(urlMatchRegex);
 }
 
-export function actionFinished() {
+export function actionFinished(result = null) {
     console.log({ status: "ACTION_FINISHED" });
 
-    chrome.runtime.sendMessage({ status: "ACTION_FINISHED" }, function ({ action }) {
+    chrome.runtime.sendMessage({ status: "ACTION_FINISHED", result }, function ({ action }) {
         console.log("ACTION_FINISHED", action);
 
         switch (action) {
@@ -18,6 +18,9 @@ export function actionFinished() {
 
             case 'ALL_ACCOUNTS_HANDLED':
                 alert('所有帳號經已登入完成。');
+                break;
+
+            case 'PAUSE':
                 break;
 
             default:

@@ -10,6 +10,11 @@ export class Account {
     groupNameStr: string = '';
     groupNames: string[] = [];
     functionsEnabled: FunctionsEnabled = new FunctionsEnabled();
+    rewardsToCollect: {
+        itemName: string,
+        count: string,
+        expireDate: string,
+    }[];
 }
 
 export class Settings {

@@ -9,25 +9,10 @@
 <hr>
 
 <form>
-    <label>
-        <input type="checkbox" [checked]="actionsToRun.indexOf('dailyLogin') > -1"
-               (change)="onActionSelectionChanged('dailyLogin', $event.target.checked)"/>
-        每人登入
-    </label>
-    <label>
-        <input type="checkbox" [checked]="actionsToRun.indexOf('collectStampReward') > -1"
-               (change)="onActionSelectionChanged('collectStampReward', $event.target.checked)"/>
-        無雙盤
-    </label>
-    <label>
-        <input type="checkbox" [checked]="actionsToRun.indexOf('raffleWithCoins') > -1"
-               (change)="onActionSelectionChanged('raffleWithCoins', $event.target.checked)"/>
-        抽獎
-    </label>
-    <label>
-        <input type="checkbox" [checked]="actionsToRun.indexOf('collectRewardInBox') > -1"
-               (change)="onActionSelectionChanged('collectRewardInBox', $event.target.checked)"/>
-        受取箱
+    <label *ngFor="let action of ['dailyLogin', 'collectStampReward', 'raffleWithCoins', 'collectRewardInBox', 'screenCapWeapons']">
+        <input type="checkbox" [checked]="actionsToRun.indexOf(action) > -1"
+               (change)="onActionSelectionChanged(action, $event.target.checked)"/>
+        {{ actionTranslation[action] }}
     </label>
 </form>
 
@@ -35,7 +20,7 @@
 
 <div>
     <div *ngFor="let action of actionsToRun; let i = index"
-          [ngStyle]="{'font-weight': i == actionToRunIndex ? 'bold': null}">{{ action }}</div>
+          [ngStyle]="{'font-weight': i == actionToRunIndex ? 'bold': null}">{{ actionTranslation[action] }}</div>
 </div>
 
 <button (click)="begin()">
