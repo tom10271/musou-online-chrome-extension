@@ -1,11 +1,6 @@
 <div class="panel panel-default" *ngIf="settings">
     <div class="panel-heading">帳號設定</div>
     <div class="panel-body">
-        <small>
-            如果你在Chrome有登入Google帳戶的話，以下輸入的密碼將會上存到Google。 <br>
-            當你在另外一台電腦再度登入時，以下設定均會自動重載。
-        </small>
-
         <div class="col-xs-12 row">
             <form (submit)="saveSettings()">
                 <table class="account-setting">
@@ -50,9 +45,9 @@
                     <textarea cols="100" rows="10" [(ngModel)]="batchAccountsImportSettings" [ngModelOptions]="{standalone: true}" placeholder="帳號,密碼,是否啟動每日登入<true/false>,群組名稱1[|群組名稱2]"></textarea>                </div>
 
                 <div class="row col-xs-12">
-                <button class="btn btn-primary">
-                    更新
-                </button>
+                    <button class="btn btn-primary">
+                        更新
+                    </button>
                 </div>
             </form>
         </div>

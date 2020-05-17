@@ -1,12 +1,14 @@
-<div class="groups-container" *ngFor="let group of groupNames"
-     (click)="group.enabled = !group.enabled; resolveAccountsToLogin();">
-    {{ group.name }}: {{ group.enabled }}
-</div>
+<ng-container *ngIf="groupNames?.length">
+    <div class="groups-container" *ngFor="let group of groupNames"
+         (click)="group.enabled = !group.enabled; resolveAccountsToLogin();">
+        {{ group.name }}: {{ group.enabled ? '選擇' : '跳過'}}
+    </div>
 
-<button (click)="setOnOffForAllGroups(true); resolveAccountsToLogin();">Enable all groups</button>
-<button (click)="setOnOffForAllGroups(false); resolveAccountsToLogin();">Disable all groups</button>
+    <button (click)="setOnOffForAllGroups(true); resolveAccountsToLogin();">啟動所有群組</button>
+    <button (click)="setOnOffForAllGroups(false); resolveAccountsToLogin();">跳過所有群組</button>
 
-<hr>
+    <hr>
+</ng-container>
 
 <form>
     <label *ngFor="let action of ['dailyLogin', 'collectStampReward', 'raffleWithCoins', 'collectRewardInBox', 'screenCapWeapons']">
