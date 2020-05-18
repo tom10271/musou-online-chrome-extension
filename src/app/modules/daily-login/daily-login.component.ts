@@ -130,12 +130,16 @@ export class DailyLoginComponent extends BaseComponent {
         const enabledGroupNames = this.groupNames.map(each => each.enabled ? each.name : null).filter(each => each);
 
         this.accountsToLogin = this.settings.accounts.filter((each) => {
-            if (each.functionsEnabled.dailyLogin && this.groupNames.length > 0) {
+            if (
+                each.functionsEnabled.dailyLogin &&
+                each.groupNames.length > 0 &&
+                this.groupNames.length > 0
+            ) {
                 if (enabledGroupNames.length === 0) {
                     return false;
                 }
 
-                if (each.groupNames.length > 0 && enabledGroupNames.length > 0) {
+                if (enabledGroupNames.length > 0) {
                     return each.groupNames.filter((each) => enabledGroupNames.indexOf(each) > -1).length > 0;
                 }
             }

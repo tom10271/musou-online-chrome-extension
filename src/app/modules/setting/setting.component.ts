@@ -59,7 +59,8 @@ export class SettingComponent extends BaseComponent implements OnInit {
         settingsClone.accounts = settingsClone.accounts.map((each: Account) => {
             each.groupNames = each.groupNameStr
                 .split("|")
-                .map((each) => each.trim());
+                .map((each) => each.trim())
+                .filter(each => each !== "");
 
             return each;
         });
